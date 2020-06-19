@@ -1,2 +1,3 @@
-# terraform-aws-serverless-common-basic-lambda
-Basic AWS Lambda function terraform module
+# Basic AWS Lambda Function terraform module
+
+
