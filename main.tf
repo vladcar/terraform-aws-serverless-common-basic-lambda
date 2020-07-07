@@ -13,6 +13,14 @@ resource "aws_lambda_function" "base_lambda" {
   reserved_concurrent_executions = var.reserved_concurrent_executions
   role                           = aws_iam_role.execution_role.arn
 
+  dynamic "vpc_config" {
+    for_each = var.enable_vpc_config ? [true] : []
+    content {
+      security_group_ids = var.security_group_ids
+      subnet_ids         = var.subnet_ids
+    }
+  }
+
   dynamic "environment" {
     for_each = length(keys(var.env_vars)) == 0 ? [] : [true]
     content {

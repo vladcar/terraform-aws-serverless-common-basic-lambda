@@ -68,6 +68,24 @@ variable "layers" {
   description = "Lambda layer ARNs"
 }
 
+variable "enable_vpc_config" {
+  type        = bool
+  default     = false
+  description = "enables lambda vpc configuration"
+}
+
+variable "security_group_ids" {
+  type        = list(string)
+  default     = []
+  description = "aws_security_group id list, requires 'enable_vpc_config' set to true"
+}
+
+variable "subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "aws_subnet id list, requires 'enable_vpc_config' set to true"
+}
+
 ###########################################
 ### Async invoke configuration ############
 ###########################################
