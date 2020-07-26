@@ -11,7 +11,7 @@ resource "aws_lambda_function" "base_lambda" {
   tags                           = var.tags
   timeout                        = var.timeout
   reserved_concurrent_executions = var.reserved_concurrent_executions
-  role                           = var.create_role ? aws_iam_role.execution_role.arn : var.execution_role
+  role                           = var.create_role ? aws_iam_role.execution_role[0].arn : var.execution_role
 
   dynamic "vpc_config" {
     for_each = var.enable_vpc_config ? [true] : []
