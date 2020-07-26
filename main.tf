@@ -11,7 +11,7 @@ resource "aws_lambda_function" "base_lambda" {
   tags                           = var.tags
   timeout                        = var.timeout
   reserved_concurrent_executions = var.reserved_concurrent_executions
-  role                           = aws_iam_role.execution_role.arn
+  role                           = var.create_role ? aws_iam_role.execution_role.arn : var.execution_role
 
   dynamic "vpc_config" {
     for_each = var.enable_vpc_config ? [true] : []
@@ -57,6 +57,7 @@ resource "aws_lambda_function_event_invoke_config" "lambda_function_invoke_confi
 }
 
 resource "aws_iam_role" "execution_role" {
+  count              = var.create_role ? 1 : 0
   name_prefix        = "LambdaExecRole"
   assume_role_policy = data.aws_iam_policy_document.base_lambda.json
 }
@@ -76,13 +77,14 @@ data "aws_iam_policy_document" "base_lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "basic_execution_policy_attachment" {
+  count      = var.create_role ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.execution_role.name
+  role       = aws_iam_role.execution_role[count.index].name
 }
 
 # attaches policies provided in 'var.attached_policies' variable to lambda execution role
 resource "aws_iam_role_policy_attachment" "policy_attachment" {
-  count = length(var.attached_policies)
+  count = var.create_role ? length(var.attached_policies) : 0
 
   policy_arn = var.attached_policies[count.index]
   role       = aws_iam_role.execution_role.name
