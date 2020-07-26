@@ -79,7 +79,7 @@ data "aws_iam_policy_document" "base_lambda" {
 resource "aws_iam_role_policy_attachment" "basic_execution_policy_attachment" {
   count      = var.create_role ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.execution_role[count.index].name
+  role       = aws_iam_role.execution_role[0].name
 }
 
 # attaches policies provided in 'var.attached_policies' variable to lambda execution role
@@ -87,5 +87,5 @@ resource "aws_iam_role_policy_attachment" "policy_attachment" {
   count = var.create_role ? length(var.attached_policies) : 0
 
   policy_arn = var.attached_policies[count.index]
-  role       = aws_iam_role.execution_role.name
+  role       = aws_iam_role.execution_role[0].name
 }
