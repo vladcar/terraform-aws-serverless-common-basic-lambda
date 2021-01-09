@@ -99,6 +99,12 @@ variable "subnet_ids" {
   description = "aws_subnet id list, requires 'enable_vpc_config' set to true"
 }
 
+variable "tracing_mode" {
+  type        = string
+  default     = null
+  description = "Enabled x-ray tracing. Can be either PassThrough or Active"
+}
+
 ###########################################
 ### Async invoke configuration ############
 ###########################################

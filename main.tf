@@ -27,6 +27,13 @@ resource "aws_lambda_function" "base_lambda" {
       variables = var.env_vars
     }
   }
+
+  dynamic "tracing_config" {
+    for_each = var.tracing_mode == null ? [] : [true]
+    content {
+      mode = var.tracing_mode
+    }
+  }
 }
 
 resource "aws_lambda_function_event_invoke_config" "lambda_function_invoke_config" {
